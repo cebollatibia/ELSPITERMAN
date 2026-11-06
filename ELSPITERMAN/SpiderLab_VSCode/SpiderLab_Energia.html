@@ -1,0 +1,2862 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#10121b"><meta name="description" content="Explora la energía del balanceo de Spider-Man. Un laboratorio interactivo de física con fórmulas sencillas y código Python para tu exposición.">
+<title>Spider Lab · La energía del balanceo</title>
+<style>
+
+
+:root {
+  --bg: #10121b;
+  --card: #191d29;
+  --card2: #1e2330;
+  --red: #fa4b61;
+  --blue: #80bcf8;
+  --text: #f3f4f8;
+  --muted: #9aa3b7;
+  --border: #ffffff12;
+  --display: 'Barlow Condensed', 'Arial Narrow', Impact, sans-serif;
+  --body: 'DM Sans', Arial, sans-serif
+}
+
+* {
+  box-sizing: border-box
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--body);
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased
+}
+
+button,
+a,
+input,
+summary {
+  -webkit-tap-highlight-color: transparent
+}
+
+button {
+  font: inherit;
+  cursor: pointer
+}
+
+button,
+a,
+input {
+  outline-offset: 5px
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+summary:focus-visible {
+  outline: 2px solid var(--blue)
+}
+
+button {
+  transition: background .2s, color .2s, transform .2s
+}
+
+button:active {
+  transform: translateY(1px)
+}
+
+button:disabled {
+  opacity: .35;
+  cursor: default
+}
+
+a {
+  color: inherit
+}
+
+button svg {
+  width: 19px;
+  height: 19px
+}
+
+button:not(.nav-button):hover {
+  filter: brightness(1.12)
+}
+
+[hidden] {
+  display: none !important
+}
+
+.svg-sprites {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden
+}
+
+.topbar {
+  max-width: 1600px;
+  margin: auto;
+  padding: 0 4.5%;
+  height: 84px;
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  border-bottom: 1px solid var(--border)
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  text-decoration: none;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 26px;
+  letter-spacing: 1.2px
+}
+
+.brand svg {
+  color: var(--red);
+  width: 30px;
+  height: 38px
+}
+
+.brand-light {
+  font-weight: 500;
+  color: var(--muted)
+}
+
+.brand small {
+  display: block;
+  font: 8px var(--body);
+  letter-spacing: 1.5px;
+  color: var(--muted);
+  margin-top: 4px
+}
+
+nav {
+  display: flex;
+  align-self: stretch;
+  gap: 36px;
+  margin: auto
+}
+
+.nav-button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #949eb1;
+  position: relative;
+  font-size: 12px
+}
+
+.nav-button span {
+  margin-left: 8px;
+  color: #77829a
+}
+
+.nav-button.active {
+  color: var(--text)
+}
+
+.nav-button.active:after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--red)
+}
+
+.outline-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 11px 15px;
+  border: 1px solid #ffffff21;
+  border-radius: 7px;
+  background: transparent;
+  color: #d7dce6;
+  font-size: 11px
+}
+
+.presentation-icon {
+  font-size: 17px
+}
+
+main {
+  max-width: 1600px;
+  padding: 34px 4.5% 30px;
+  margin: auto
+}
+
+.page-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 26px;
+  gap: 20px
+}
+
+.eyebrow {
+  font-size: 9px;
+  letter-spacing: 1.8px;
+  color: #b1b9ca;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-weight: 600
+}
+
+.eyebrow>span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--red)
+}
+
+.eyebrow i {
+  font-style: normal;
+  color: #50596c;
+  margin: 0 2px
+}
+
+h1 {
+  font-family: var(--display);
+  font-weight: 600;
+  letter-spacing: .1px;
+  font-size: 46px;
+  line-height: 1.1;
+  margin: 12px 0 9px
+}
+
+h1 em {
+  font-style: normal;
+  color: var(--red)
+}
+
+.page-heading p {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 0;
+  line-height: 1.8
+}
+
+.lesson-tag {
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  border: 1px solid #ffffff12;
+  border-radius: 30px;
+  padding: 10px 14px;
+  color: #a1aabd;
+  white-space: nowrap
+}
+
+.lesson-tag span {
+  color: var(--red);
+  font-size: 17px;
+  margin-right: 7px
+}
+
+.mobile-break {
+  display: none
+}
+
+.lab-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 2.38fr) minmax(280px, 1fr);
+  gap: 22px
+}
+
+.main-column,
+.side-column {
+  min-width: 0
+}
+
+.stage-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden
+}
+
+.scene-top {
+  height: 45px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 0 20px;
+  background: #151d2b;
+  font-size: 9px;
+  letter-spacing: 1.2px
+}
+
+.scene-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #cad6e8
+}
+
+.live-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--red);
+  box-shadow: 0 0 9px #fa4b6150
+}
+
+.scene-caption {
+  margin-left: auto;
+  color: #7e8fa7;
+  font-size: 8px
+}
+
+.icon-button {
+  background: none;
+  border: 0;
+  color: #a9b4c8;
+  font-size: 23px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: 5px
+}
+
+.info-button {
+  border: 1px solid #7e8fa760;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  font-size: 10px;
+  font-family: serif
+}
+
+.scene-wrap {
+  position: relative;
+  background: #1a263b
+}
+
+.scene-wrap>svg {
+  display: block;
+  width: 100%;
+  height: auto
+}
+
+.scene-value {
+  position: absolute;
+  top: 22px;
+  left: 22px;
+  padding: 12px 14px;
+  border-left: 2px solid #ffffff30;
+  background: #0c172568;
+  backdrop-filter: blur(3px)
+}
+
+.scene-value small {
+  font-size: 8px;
+  letter-spacing: 1.5px;
+  color: #a1afc5
+}
+
+.scene-value strong {
+  font-family: var(--display);
+  font-size: 35px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums
+}
+
+.scene-value>div {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-top: 3px
+}
+
+.scene-value>div>span {
+  font-size: 10px;
+  color: #a1afc5
+}
+
+.scene-disclaimer {
+  position: absolute;
+  bottom: 9px;
+  left: 18px;
+  font-size: 8px;
+  letter-spacing: .2px;
+  color: #a5b1c6
+}
+
+.transport {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 17px 20px 12px
+}
+
+.primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--red);
+  border: 1px solid transparent;
+  border-radius: 7px;
+  color: white;
+  padding: 13px 18px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap
+}
+
+.primary.small {
+  padding: 10px 14px;
+  font-size: 11px
+}
+
+.transport .primary {
+  min-width: 119px;
+  padding: 11px 14px
+}
+
+.reset {
+  font-size: 25px;
+  margin-right: 7px
+}
+
+.position-control {
+  flex: 1;
+  min-width: 0
+}
+
+.position-control label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 8px;
+  letter-spacing: 1px;
+  color: #929eb3;
+  margin-bottom: 6px
+}
+
+.position-control output {
+  color: #c9d1e0;
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums
+}
+
+.speed-button {
+  padding: 7px 9px;
+  background: #ffffff07;
+  border: 1px solid #ffffff0b;
+  border-radius: 5px;
+  color: #b1b9cb;
+  font-size: 10px
+}
+
+.speed-button[aria-pressed=true] {
+  color: var(--red);
+  border-color: #fa4b6150
+}
+
+input[type=range] {
+  appearance: none;
+  width: 100%;
+  height: 18px;
+  background: transparent;
+  cursor: pointer;
+  margin: 0;
+  --fill: 50%;
+  --range-color: var(--red)
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+  height: 3px;
+  border-radius: 10px;
+  background: linear-gradient(to right, var(--range-color) var(--fill), #383e50 var(--fill))
+}
+
+input[type=range]::-moz-range-track {
+  height: 3px;
+  border-radius: 10px;
+  background: #383e50
+}
+
+input[type=range]::-moz-range-progress {
+  background: var(--range-color);
+  height: 3px
+}
+
+input[type=range]::-webkit-slider-thumb {
+  appearance: none;
+  width: 11px;
+  height: 11px;
+  background: #f4f6fc;
+  border: 2px solid var(--range-color);
+  border-radius: 50%;
+  margin-top: -4px;
+  box-shadow: 0 0 0 3px #fa4b6115
+}
+
+input[type=range]::-moz-range-thumb {
+  width: 9px;
+  height: 9px;
+  background: white;
+  border: 2px solid var(--range-color);
+  border-radius: 50%
+}
+
+.checkpoint-row {
+  display: flex;
+  gap: 8px;
+  margin: 0 20px 18px;
+  padding-left: 170px
+}
+
+.checkpoint-row button {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex: 1;
+  background: transparent;
+  color: #a5aec1;
+  border: 1px solid #ffffff13;
+  border-radius: 5px;
+  padding: 8px 10px;
+  font-size: 10px;
+  white-space: nowrap
+}
+
+.checkpoint-row button span {
+  font: 10px monospace;
+  color: var(--blue)
+}
+
+.checkpoint-row button[data-point="50"] span {
+  color: var(--red)
+}
+
+.checkpoint-row button.active {
+  background: #ffffff07;
+  border-color: #ffffff35;
+  color: white
+}
+
+.energy-card {
+  padding: 20px 22px 16px;
+  margin-top: 18px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #171b26
+}
+
+.energy-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 22px
+}
+
+.energy-head h2 {
+  font-size: 13px;
+  font-weight: 500;
+  margin: 0
+}
+
+.energy-head>span {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+  color: #8d9bb0;
+  font-size: 9px
+}
+
+.energy-head svg {
+  width: 13px;
+  height: 13px;
+  color: #89c6b2
+}
+
+.energy-figures {
+  display: flex;
+  gap: 20px;
+  align-items: center
+}
+
+.energy-figures>div {
+  flex: 1;
+  min-width: 0
+}
+
+.energy-figures small {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 8px;
+  letter-spacing: .8px;
+  color: #9ba7bc;
+  margin-bottom: 8px
+}
+
+.energy-figures small span {
+  color: #727e92;
+  letter-spacing: 0;
+  margin-left: auto;
+  font-size: 8px
+}
+
+.energy-figures strong {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 30px;
+  letter-spacing: .4px;
+  font-variant-numeric: tabular-nums
+}
+
+.energy-figures b {
+  color: #8491a6;
+  font-size: 10px;
+  font-weight: 400;
+  margin-left: 5px
+}
+
+.blue-dot,
+.red-dot {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%
+}
+
+.blue-dot {
+  background: var(--blue)
+}
+
+.red-dot {
+  background: var(--red)
+}
+
+.energy-figures>div:first-child strong {
+  color: var(--blue)
+}
+
+.energy-figures>div:nth-of-type(2) strong {
+  color: #ff697b
+}
+
+.exchange {
+  color: #657189;
+  font-size: 21px
+}
+
+.energy-figures .total-figure {
+  flex: .9;
+  border-left: 1px solid #ffffff14;
+  padding-left: 20px;
+  margin-left: 8px
+}
+
+.energy-track {
+  display: flex;
+  overflow: hidden;
+  height: 6px;
+  border-radius: 5px;
+  margin: 19px 0 7px;
+  background: var(--red)
+}
+
+#potentialFill {
+  width: 100%;
+  background: var(--blue)
+}
+
+#kineticFill {
+  flex: 1;
+  background: var(--red)
+}
+
+.energy-percent {
+  display: flex;
+  justify-content: space-between;
+  font-size: 8px;
+  color: #828fa5
+}
+
+.parameters {
+  border: 1px solid var(--border);
+  background: var(--card);
+  border-radius: 10px;
+  padding: 21px
+}
+
+.card-heading {
+  display: flex;
+  align-items: center;
+  gap: 10px
+}
+
+.section-index {
+  font: 9px monospace;
+  color: var(--red);
+  border: 1px solid #fa4b6130;
+  padding: 5px;
+  border-radius: 4px
+}
+
+.card-heading h2 {
+  font-size: 13px;
+  font-weight: 500;
+  margin: 0
+}
+
+.adjust-icon {
+  margin-left: auto;
+  font-size: 20px;
+  color: #69778f
+}
+
+.card-intro {
+  font-size: 10px;
+  color: var(--muted);
+  line-height: 1.8;
+  margin: 13px 0 25px
+}
+
+.input-group {
+  margin: 0 0 25px
+}
+
+.input-group label {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  font-size: 11px;
+  margin-bottom: 12px;
+  color: #d7deec
+}
+
+.input-group label>span {
+  font: 23px var(--display);
+  font-variant-numeric: tabular-nums
+}
+
+.input-group label small {
+  font: 10px var(--body);
+  color: var(--muted)
+}
+
+.range-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 8px;
+  color: #74839b;
+  margin-top: 5px
+}
+
+.fixed-values {
+  border-top: 1px solid var(--border);
+  padding-top: 14px
+}
+
+.fixed-values>div {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+  font-size: 9px;
+  color: #8e9bb0
+}
+
+.fixed-values strong {
+  color: #c7d0e0;
+  font-size: 10px;
+  font-weight: 400
+}
+
+.fixed-values small {
+  font-size: 8px;
+  color: #8e9bb0
+}
+
+.geometry-note {
+  font-size: 9px;
+  line-height: 1.7;
+  color: #7f8ba2;
+  margin: 12px 0 18px
+}
+
+.preset-label {
+  font-size: 8px;
+  letter-spacing: 1px;
+  color: #8995ab;
+  margin: 18px 0 11px
+}
+
+.presets {
+  display: flex;
+  gap: 6px
+}
+
+.presets button {
+  border: 1px solid #ffffff19;
+  border-radius: 5px;
+  color: #a9b4c7;
+  background: none;
+  padding: 9px 4px;
+  font-size: 9px;
+  flex: 1;
+  white-space: nowrap
+}
+
+.presets button.active {
+  background: #fa4b6112;
+  border-color: #fa4b6166;
+  color: #ff8594
+}
+
+.insight {
+  margin-top: 17px;
+  background: linear-gradient(130deg, #21202d, #1a1d29);
+  border: 1px solid #fa4b611c;
+  border-radius: 10px;
+  padding: 20px 21px
+}
+
+.insight-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #b5a3b6;
+  font-size: 8px;
+  letter-spacing: 1.3px
+}
+
+.spark {
+  color: var(--red);
+  font-size: 17px
+}
+
+.insight h3 {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 23px;
+  margin: 13px 0 8px
+}
+
+.insight p {
+  font-size: 10px;
+  line-height: 1.9;
+  color: #9da7bb;
+  min-height: 56px;
+  margin: 0
+}
+
+.work-value {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  border-top: 1px solid #ffffff10;
+  margin-top: 17px;
+  padding-top: 15px;
+  font-size: 10px;
+  color: #b2bccd
+}
+
+.work-value>span small {
+  display: block;
+  font-size: 8px;
+  color: #76839b;
+  margin-top: 4px
+}
+
+.work-value strong {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 21px;
+  white-space: nowrap
+}
+
+.work-value strong small {
+  font: 9px var(--body);
+  color: #8b98ad
+}
+
+.code-invite {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  text-align: left;
+  padding: 15px 13px;
+  margin-top: 14px;
+  background: transparent;
+  border: 1px dashed #ffffff24;
+  border-radius: 8px;
+  color: #a9b5c8;
+  font-size: 10px
+}
+
+.code-icon {
+  font: 19px monospace;
+  color: #747f98
+}
+
+.code-invite strong {
+  color: #e6eaf2;
+  font-weight: 500
+}
+
+.code-invite small {
+  display: block;
+  color: #7d899f;
+  font-size: 9px;
+  margin-top: 5px
+}
+
+.code-invite b {
+  font-size: 19px;
+  font-weight: 400;
+  margin-left: auto
+}
+
+.bottom-note {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: center;
+  margin-top: 24px;
+  padding: 16px 0 0;
+  border-top: 1px solid var(--border);
+  font-size: 10px;
+  color: #9aa6bb
+}
+
+.bottom-note b {
+  font-weight: 500;
+  color: #c8d1e1
+}
+
+.bottom-note button {
+  background: none;
+  border: 0;
+  color: #cbd3e1;
+  font-size: 10px;
+  white-space: nowrap
+}
+
+.bottom-note button span {
+  margin-left: 12px;
+  color: var(--red)
+}
+
+footer {
+  max-width: 1600px;
+  margin: auto;
+  padding: 20px 4.5% 25px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  font-size: 8px;
+  color: #6f7b91
+}
+
+footer>span:first-child {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  letter-spacing: 1px
+}
+
+footer svg {
+  width: 13px;
+  height: 18px;
+  color: #737f95
+}
+
+footer i {
+  font-style: normal;
+  color: #3c465b
+}
+
+footer button {
+  color: #8894a9;
+  background: none;
+  border: 0;
+  font-size: 9px
+}
+
+.view {
+  animation: enter .35s ease
+}
+
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(7px)
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0)
+  }
+}
+
+.tour {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: #273142;
+  border: 1px solid #52657d;
+  border-radius: 10px;
+  padding: 18px 22px;
+  margin-bottom: 20px
+}
+
+.tour-index {
+  font: 14px var(--display);
+  color: var(--blue);
+  white-space: nowrap
+}
+
+.tour strong {
+  font-size: 13px;
+  font-weight: 500
+}
+
+.tour p {
+  font-size: 11px;
+  color: #b2bfd1;
+  margin: 6px 0 0;
+  line-height: 1.7
+}
+
+.tour-actions {
+  display: flex;
+  gap: 12px;
+  margin-left: auto;
+  align-items: center;
+  flex-shrink: 0
+}
+
+.text-button {
+  border: 0;
+  background: none;
+  color: #aebad0;
+  font-size: 11px;
+  padding: 5px
+}
+
+.theory-grid {
+  display: grid;
+  grid-template-columns: 1.7fr 1fr;
+  gap: 28px
+}
+
+.formula-list {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 5px 30px
+}
+
+.formula-list article {
+  display: flex;
+  gap: 23px;
+  padding: 26px 0;
+  border-bottom: 1px solid var(--border)
+}
+
+.formula-list article:last-child {
+  border: 0
+}
+
+.formula-number {
+  font: 23px var(--display);
+  color: var(--red);
+  padding-top: 1px
+}
+
+.formula-list h2 {
+  font-size: 15px;
+  font-weight: 500;
+  margin: 0 0 9px
+}
+
+.formula-list p {
+  font-size: 11px;
+  line-height: 1.7;
+  color: #9da9bd;
+  margin: 0 0 17px
+}
+
+.formula-list code {
+  font: 19px monospace;
+  color: #e7edf9
+}
+
+.substitution {
+  color: #8395af;
+  font: 11px monospace;
+  margin-top: 12px;
+  line-height: 1.8
+}
+
+.concept-card,
+.challenge,
+.source-card {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--card);
+  padding: 26px;
+  margin-bottom: 20px
+}
+
+.concept-card dt {
+  font-size: 12px;
+  color: #cbd6e8;
+  margin: 20px 0 6px
+}
+
+.concept-card dd {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.8;
+  color: #8798b1
+}
+
+.challenge h3 {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 27px;
+  line-height: 1.25;
+  margin: 17px 0
+}
+
+.challenge>div {
+  display: flex;
+  gap: 8px
+}
+
+.challenge button {
+  background: #ffffff05;
+  border: 1px solid #ffffff25;
+  border-radius: 5px;
+  padding: 10px;
+  color: #c6d3e8;
+  font-size: 11px
+}
+
+.challenge p {
+  font-size: 11px;
+  color: var(--blue);
+  line-height: 1.9;
+  margin-bottom: 0
+}
+
+.challenge button.chosen {
+  border-color: var(--blue)
+}
+
+.source-card h3 {
+  font-weight: 500;
+  font-size: 13px;
+  margin-top: 0
+}
+
+.source-card p {
+  font-size: 11px;
+  line-height: 1.9;
+  color: #8e9cb2
+}
+
+.code-layout {
+  display: grid;
+  grid-template-columns: 1.7fr 1fr;
+  gap: 28px
+}
+
+.code-window {
+  background: #171c28;
+  border: 1px solid #ffffff13;
+  border-radius: 12px;
+  overflow: hidden;
+  min-width: 0
+}
+
+.code-top {
+  background: #202634;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+  padding: 0 18px
+}
+
+.window-dots {
+  display: flex;
+  gap: 6px
+}
+
+.window-dots i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #4b5265
+}
+
+.window-dots i:first-child {
+  background: #df5f73
+}
+
+.window-dots i:nth-child(2) {
+  background: #ceae6f
+}
+
+.window-dots i:nth-child(3) {
+  background: #6ea79b
+}
+
+.code-tabs {
+  display: flex;
+  gap: 8px
+}
+
+.code-tabs button {
+  color: #8f9db3;
+  border: 0;
+  background: none;
+  padding: 8px 12px;
+  font-size: 11px;
+  border-radius: 4px
+}
+
+.code-tabs button.active {
+  background: #ffffff0b;
+  color: #f4f7fc
+}
+
+.code-file {
+  color: #8291a8;
+  font: 10px monospace;
+  padding: 23px 24px 0
+}
+
+.code-window pre {
+  font: 12px/2.15 monospace;
+  overflow: auto;
+  padding: 10px 24px 25px;
+  margin: 0;
+  color: #d1ddef;
+  tab-size: 4
+}
+
+.code-line {
+  display: block;
+  min-height: 25px;
+  white-space: pre
+}
+
+.line-number {
+  color: #495a75;
+  user-select: none;
+  display: inline-block;
+  width: 25px;
+  margin-right: 14px;
+  text-align: right
+}
+
+.code-line .kw {
+  color: #d29fe8
+}
+
+.code-line .comment {
+  color: #7187a3
+}
+
+.code-line .num {
+  color: #f3ae86
+}
+
+.code-line .fn {
+  color: #85c7ee
+}
+
+.code-bottom {
+  border-top: 1px solid #ffffff0a;
+  font-size: 9px;
+  color: #8c9cb5;
+  padding: 17px 20px;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  line-height: 1.8
+}
+
+.code-explanation {
+  padding: 10px 4px
+}
+
+.code-explanation h2 {
+  font-family: var(--display);
+  font-size: 30px;
+  font-weight: 500;
+  margin-top: 0
+}
+
+.code-explanation ol {
+  padding-left: 21px
+}
+
+.code-explanation li {
+  color: var(--red);
+  padding: 0 0 17px 6px;
+  font-size: 12px
+}
+
+.code-explanation li strong {
+  color: #d8e1f1;
+  font-weight: 500
+}
+
+.code-explanation li p {
+  color: #919fb6;
+  font-size: 12px;
+  line-height: 1.9;
+  margin: 7px 0
+}
+
+.honest-note {
+  background: #1a2434;
+  border-left: 2px solid var(--blue);
+  padding: 18px 19px;
+  margin: 10px 0 24px
+}
+
+.honest-note strong {
+  font-size: 12px;
+  font-weight: 500
+}
+
+.honest-note p {
+  font-size: 11px;
+  line-height: 1.9;
+  color: #99acc5;
+  margin-bottom: 0
+}
+
+.download-note {
+  font-size: 10px;
+  color: #778ba8;
+  display: block;
+  margin-top: 9px
+}
+
+.animation-explanation {
+  margin-top: 25px;
+  border: 1px solid #ffffff14;
+  padding: 22px 26px;
+  border-radius: 8px;
+  line-height: 1.9
+}
+
+.animation-explanation summary {
+  cursor: pointer;
+  font-size: 13px
+}
+
+.animation-explanation p {
+  color: #94a5bd;
+  font-size: 12px
+}
+
+.animation-explanation code {
+  color: #bdcfec
+}
+
+dialog {
+  width: min(570px, 92vw);
+  background: #1a2130;
+  color: #e3ebf8;
+  border: 1px solid #4f5c76;
+  border-radius: 15px;
+  padding: 40px;
+  box-shadow: 0 30px 100px #0008
+}
+
+dialog::backdrop {
+  background: #050914c9;
+  backdrop-filter: blur(6px)
+}
+
+.dialog-close {
+  position: absolute;
+  right: 12px;
+  top: 12px
+}
+
+dialog h2 {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 37px;
+  line-height: 1.12;
+  margin: 20px 0
+}
+
+dialog p,
+dialog li {
+  font-size: 12px;
+  line-height: 1.9;
+  color: #a4b4cb
+}
+
+dialog ul {
+  padding-left: 18px
+}
+
+dialog li {
+  margin: 9px 0
+}
+
+dialog strong {
+  color: #d2dff1;
+  font-weight: 500
+}
+
+dialog .primary {
+  margin-top: 15px
+}
+
+body.presenting .topbar .tour-open {
+  color: var(--blue);
+  border-color: #80bcf855
+}
+
+@media(min-width:1450px) {
+  h1 {
+    font-size: 51px
+  }
+
+  .input-group {
+    margin-bottom: 31px
+  }
+
+  .parameters {
+    padding: 25px
+  }
+
+  .card-intro {
+    margin-bottom: 30px
+  }
+
+  .insight {
+    padding: 25px
+  }
+
+  .insight p {
+    font-size: 12px
+  }
+
+  .scene-value strong {
+    font-size: 44px
+  }
+
+  .scene-value small {
+    font-size: 9px
+  }
+
+  .card-heading h2 {
+    font-size: 15px
+  }
+
+  .input-group label {
+    font-size: 13px
+  }
+
+  .fixed-values>div {
+    font-size: 11px
+  }
+
+  .geometry-note {
+    font-size: 10px
+  }
+
+  .presets button {
+    font-size: 11px
+  }
+
+  .energy-figures strong {
+    font-size: 35px
+  }
+
+  .energy-head h2 {
+    font-size: 15px
+  }
+}
+
+@media(max-width:1080px) {
+  .topbar {
+    gap: 20px;
+    padding: 0 3%
+  }
+
+  nav {
+    gap: 22px
+  }
+
+  .topbar .outline-button {
+    font-size: 10px
+  }
+
+  main {
+    padding: 28px 3%
+  }
+
+  .lab-grid {
+    grid-template-columns: minmax(0, 1.8fr) minmax(270px, 1fr);
+    gap: 16px
+  }
+
+  .lesson-tag {
+    display: none
+  }
+
+  h1 {
+    font-size: 42px
+  }
+
+  .checkpoint-row {
+    padding-left: 0
+  }
+
+  .scene-caption {
+    font-size: 7px
+  }
+
+  .energy-figures {
+    gap: 10px
+  }
+
+  .energy-figures strong {
+    font-size: 25px
+  }
+
+  .energy-figures small span {
+    display: none
+  }
+
+  .energy-figures .total-figure {
+    padding-left: 12px;
+    margin-left: 0
+  }
+
+  .parameters {
+    padding: 18px
+  }
+
+  .insight {
+    padding: 18px
+  }
+
+  .tour {
+    flex-wrap: wrap
+  }
+
+  .tour-actions {
+    margin-left: 0
+  }
+
+  .code-layout {
+    grid-template-columns: 1.4fr 1fr
+  }
+
+  .line-number {
+    width: 15px;
+    margin-right: 10px
+  }
+
+  .code-window pre {
+    padding: 12px;
+    font-size: 11px
+  }
+}
+
+@media(max-width:760px) {
+  .topbar {
+    height: auto;
+    min-height: 115px;
+    flex-wrap: wrap;
+    gap: 0;
+    justify-content: space-between;
+    padding: 15px 5% 0
+  }
+
+  .brand {
+    font-size: 23px
+  }
+
+  .brand svg {
+    width: 25px;
+    height: 34px
+  }
+
+  .brand small {
+    font-size: 7px
+  }
+
+  .topbar .outline-button {
+    order: 1;
+    padding: 8px 10px
+  }
+
+  nav {
+    order: 2;
+    width: 100%;
+    justify-content: space-between;
+    gap: 20px;
+    margin: 8px 0 0;
+    height: 43px
+  }
+
+  .nav-button {
+    font-size: 11px;
+    flex: 1
+  }
+
+  .presentation-icon {
+    display: none
+  }
+
+  main {
+    padding: 26px 5%
+  }
+
+  .page-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 21px
+  }
+
+  h1 {
+    font-size: 39px;
+    line-height: 1.04;
+    margin-top: 14px
+  }
+
+  .page-heading p {
+    font-size: 11px;
+    max-width: 330px
+  }
+
+  .mobile-break {
+    display: block
+  }
+
+  .eyebrow {
+    font-size: 8px;
+    letter-spacing: 1.3px
+  }
+
+  .lab-grid {
+    grid-template-columns: 1fr;
+    gap: 20px
+  }
+
+  .scene-top {
+    padding: 0 14px;
+    height: 38px;
+    font-size: 8px
+  }
+
+  .scene-caption {
+    font-size: 6px;
+    letter-spacing: .7px
+  }
+
+  .scene-value {
+    left: 12px;
+    top: 10px;
+    padding: 5px 8px
+  }
+
+  .scene-value strong {
+    font-size: 24px
+  }
+
+  .scene-value small {
+    font-size: 6px;
+    letter-spacing: .7px
+  }
+
+  .scene-value>div>span {
+    font-size: 8px
+  }
+
+  .scene-disclaimer {
+    font-size: 6px;
+    left: 10px;
+    bottom: 6px
+  }
+
+  .transport {
+    padding: 13px 12px 10px;
+    gap: 7px
+  }
+
+  .transport .primary {
+    min-width: 94px;
+    font-size: 10px;
+    padding: 9px
+  }
+
+  .transport .primary svg {
+    width: 14px;
+    height: 14px
+  }
+
+  .reset {
+    width: 24px;
+    margin: 0;
+    font-size: 23px
+  }
+
+  .position-control label {
+    font-size: 6px;
+    letter-spacing: .4px
+  }
+
+  .speed-button {
+    font-size: 8px;
+    padding: 7px
+  }
+
+  .checkpoint-row {
+    margin: 0 12px 14px;
+    gap: 6px
+  }
+
+  .checkpoint-row button {
+    font-size: 9px;
+    padding: 7px;
+    justify-content: center
+  }
+
+  .checkpoint-row button span {
+    font-size: 9px
+  }
+
+  .energy-card {
+    padding: 18px 15px;
+    margin-top: 14px
+  }
+
+  .energy-head h2 {
+    font-size: 12px
+  }
+
+  .energy-head>span {
+    font-size: 7px
+  }
+
+  .energy-head {
+    gap: 5px
+  }
+
+  .energy-figures {
+    gap: 8px
+  }
+
+  .energy-figures strong {
+    font-size: 24px;
+    letter-spacing: 0
+  }
+
+  .energy-figures small {
+    font-size: 6.5px;
+    letter-spacing: .2px
+  }
+
+  .energy-figures b {
+    font-size: 8px;
+    margin-left: 3px
+  }
+
+  .exchange {
+    font-size: 15px
+  }
+
+  .energy-figures .total-figure {
+    padding-left: 10px
+  }
+
+  .energy-percent {
+    font-size: 7px
+  }
+
+  .parameters {
+    padding: 22px
+  }
+
+  .card-heading h2 {
+    font-size: 14px
+  }
+
+  .card-intro {
+    font-size: 12px
+  }
+
+  .input-group label {
+    font-size: 12px
+  }
+
+  .input-group label>span {
+    font-size: 27px
+  }
+
+  .fixed-values>div {
+    font-size: 11px
+  }
+
+  .fixed-values strong {
+    font-size: 12px
+  }
+
+  .geometry-note {
+    font-size: 10px
+  }
+
+  .presets button {
+    font-size: 11px;
+    padding: 10px
+  }
+
+  .preset-label {
+    font-size: 9px
+  }
+
+  .insight {
+    padding: 22px
+  }
+
+  .insight p {
+    font-size: 12px;
+    min-height: 0
+  }
+
+  .work-value {
+    font-size: 11px
+  }
+
+  .code-invite {
+    font-size: 12px;
+    padding: 19px
+  }
+
+  .bottom-note {
+    align-items: flex-start;
+    flex-direction: column;
+    line-height: 1.9;
+    gap: 8px
+  }
+
+  .bottom-note button {
+    padding: 0
+  }
+
+  .tour {
+    gap: 12px;
+    padding: 18px
+  }
+
+  .tour-actions {
+    width: 100%;
+    justify-content: space-between
+  }
+
+  .tour>div:nth-child(2) {
+    flex: 1
+  }
+
+  .tour-index {
+    font-size: 12px
+  }
+
+  .tour p {
+    font-size: 10px
+  }
+
+  .theory-grid,
+  .code-layout {
+    grid-template-columns: 1fr;
+    gap: 22px
+  }
+
+  .formula-list {
+    padding: 0 20px
+  }
+
+  .formula-list article {
+    gap: 16px
+  }
+
+  .formula-list h2 {
+    font-size: 14px
+  }
+
+  .formula-list p {
+    font-size: 11px
+  }
+
+  .formula-list code {
+    font-size: 17px
+  }
+
+  .formula-number {
+    font-size: 20px
+  }
+
+  .substitution {
+    font-size: 10px
+  }
+
+  .code-window pre {
+    font-size: 10px;
+    line-height: 2
+  }
+
+  .code-top {
+    padding: 0 12px
+  }
+
+  .code-file {
+    padding-left: 14px
+  }
+
+  .code-bottom {
+    font-size: 8px
+  }
+
+  .code-explanation h2 {
+    font-size: 28px
+  }
+
+  .animation-explanation {
+    padding: 18px
+  }
+
+  .animation-explanation summary {
+    font-size: 12px
+  }
+
+  footer {
+    flex-wrap: wrap;
+    padding: 20px 5%;
+    gap: 14px;
+    font-size: 7px
+  }
+
+  footer>span:first-child {
+    width: 100%
+  }
+
+  footer button {
+    font-size: 8px
+  }
+
+  dialog {
+    padding: 30px 24px
+  }
+
+  dialog h2 {
+    font-size: 32px
+  }
+}
+
+@media(prefers-reduced-motion:reduce) {
+
+  *,
+  *:before,
+  *:after {
+    animation: none !important;
+    transition: none !important
+  }
+}
+
+.primary,
+.outline-button {
+  text-decoration: none
+}
+
+.outline-button[aria-disabled=true] {
+  opacity: .65;
+  cursor: default
+}
+
+</style>
+</head>
+<body>
+<svg class="svg-sprites" aria-hidden="true"><defs><symbol id="spider-icon" viewBox="0 0 40 44"><path d="M20 10v27M15 18 5 10V2m11 20L2 18V9m14 18L4 33v10m14-12-7 7v6m14-26 10-8V2m-11 20 14-4V9M24 27l12 6v10m-14-12 7 7v6" fill="none" stroke="currentColor" stroke-width="2"/><ellipse cx="20" cy="24" rx="5" ry="11" fill="currentColor"/><ellipse cx="20" cy="9" rx="4" ry="5" fill="currentColor"/></symbol><symbol id="play-icon" viewBox="0 0 20 20"><path d="m7 4 9 6-9 6z" fill="currentColor"/></symbol><symbol id="pause-icon" viewBox="0 0 20 20"><path d="M5 4h4v12H5zm6 0h4v12h-4z" fill="currentColor"/></symbol></defs></svg>
+<header class="topbar">
+<a class="brand" href="#laboratorio" aria-label="Spider Lab, laboratorio"><svg><use href="#spider-icon"/></svg><span>SPIDER<span class="brand-light">LAB</span><small>LA FÍSICA DETRÁS DEL HÉROE</small></span></a>
+<nav aria-label="Navegación principal">
+<button class="nav-button active" data-view="laboratorio">Laboratorio</button><button class="nav-button" data-view="fisica">La física</button><button class="nav-button" data-view="codigo">El código <span>&lt;/&gt;</span></button>
+</nav>
+<button class="outline-button tour-open"><span class="presentation-icon">▣</span> Modo exposición</button>
+</header>
+<main>
+<section id="view-laboratorio" class="view">
+<div class="page-heading">
+<div>
+<div class="eyebrow">
+<span></span> PROYECTO 02 <i>/</i> TRABAJO Y ENERGÍA
+</div>
+<h1>Un gran poder.<br class="mobile-break"> Una <em>gran energía.</em></h1><p>De la altura al movimiento. Explora la ciencia detrás de cada balanceo.</p>
+</div>
+<span class="lesson-tag"><span>↗</span> FÍSICA QUE PUEDES VER</span>
+</div>
+<div id="tour" class="tour" hidden>
+<div class="tour-index" id="tourIndex">
+01 / 05
+</div>
+<div>
+<strong id="tourTitle"></strong><p id="tourText"></p>
+</div>
+<div class="tour-actions">
+<button id="tourBack" class="text-button">← Atrás</button><button id="tourNext" class="primary small">Siguiente →</button><button id="tourClose" class="icon-button" aria-label="Cerrar modo exposición">×</button>
+</div>
+</div>
+<div class="lab-grid">
+<div class="main-column">
+<section class="stage-card" aria-label="Explorador del balanceo">
+<div class="scene-top">
+<div class="scene-title">
+<span class="live-dot"></span><span id="playStatus">EN MOVIMIENTO</span>
+</div>
+<span class="scene-caption">MANHATTAN · MODELO IDEAL</span><button id="modelHelp" class="icon-button info-button" aria-label="Ver los supuestos del modelo">i</button>
+</div>
+<div class="scene-wrap">
+<svg id="scene" viewBox="0 0 900 410" role="img" aria-labelledby="sceneTitle sceneDesc">
+<title id="sceneTitle">Spider-Man se balancea entre dos edificios</title><desc id="sceneDesc">Explora la energía en los extremos y en el punto más bajo usando los controles debajo de la ilustración. La silueta del héroe se vuelve más ancha y redondeada al aumentar la masa.</desc>
+<defs>
+<linearGradient id="sky" x2="0" y2="1"><stop stop-color="#111d30"/><stop offset=".7" stop-color="#27354a"/><stop offset="1" stop-color="#686078"/></linearGradient>
+<radialGradient id="glow"><stop stop-color="#8c657d" stop-opacity=".45"/><stop offset="1" stop-color="#8c657d" stop-opacity="0"/></radialGradient>
+<linearGradient id="tower" x2="1" y2=".2"><stop stop-color="#202c40"/><stop offset="1" stop-color="#0e192b"/></linearGradient>
+<linearGradient id="suit" x2="1" y2=".6"><stop stop-color="#ff5b62"/><stop offset=".5" stop-color="#e72d46"/><stop offset="1" stop-color="#991e37"/></linearGradient>
+<pattern id="windows" width="18" height="25" patternUnits="userSpaceOnUse"><rect x="6" y="7" width="6" height="12" fill="#9db0c4" opacity=".12"/><path d="M6 13h6" stroke="#0e192b" stroke-width="2"/></pattern>
+<pattern id="farwindows" width="13" height="20" patternUnits="userSpaceOnUse"><rect x="4" y="5" width="3" height="6" fill="#edd3a6" opacity=".16"/></pattern>
+<pattern id="grid" width="45" height="45" patternUnits="userSpaceOnUse"><path d="M45 0H0v45" fill="none" stroke="#e0edff" stroke-opacity=".035"/></pattern>
+<filter id="soft"><feGaussianBlur stdDeviation="5"/></filter>
+<g id="hero-art">
+<path id="hero-arm-outline" d="M-7 10-23-6-5-39M8 11 28 21 36 7" stroke="#9e2239" stroke-width="13" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="hero-arms" d="M-7 10-23-6-5-39M8 11 28 21 36 7" stroke="url(#suit)" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="hero-leg-outline" d="m-7 32-17 26-22 9m48-35 23 17-3 28" fill="none" stroke="#101c35" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="hero-legs" d="m-7 32-17 26-22 9m48-35 23 17-3 28" fill="none" stroke="#264268" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="m-28 61-15 7-7-2m72 4 1 12 9 1" fill="none" stroke="url(#suit)" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="hero-torso" d="M-12 2Q0-5 13 3L10 25 5 38H-8L-12 22Z" fill="url(#suit)" stroke="#991c34"/>
+<path id="hero-sides" d="m-12 12 6 9-2 17h-4Zm25 0-6 9-2 17h5Z" fill="#203958"/>
+<path id="hero-highlight" fill="#ffbac1" opacity=".14"/>
+<path d="M-7-6-5 3 5 2 6-8Z" fill="#b82b41"/>
+<ellipse cx="0" cy="-17" rx="11.5" ry="15" fill="url(#suit)" stroke="#9f253b"/>
+<path d="M0-31v28M-10-23 11-13M10-23-10-13M-11-18Q0-25 11-18M-9-8Q0-14 9-8" stroke="#6c233a" stroke-width=".7" fill="none" opacity=".8"/>
+<path d="M-10-22-1-16-4-10Q-9-11-10-22M10-22 1-16 4-10Q9-11 10-22" fill="#eef8ff" stroke="#141c30" stroke-width="1.6"/>
+<path d="M-19-4-12 1m-4-13 7 4m0-16 6 4M18 14l-2 8m10-5 2 8" stroke="#7b2138" stroke-width=".8" opacity=".65"/>
+<path id="hero-torso-web" d="M-10 7h20m-19 7h18m-17 7H9m-16 7H7" stroke="#7b2138" stroke-width=".8" opacity=".65" fill="none"/>
+<g id="hero-emblem">
+<path d="M0 9v21M0 13-7 9-10 3M0 16-8 14-11 10M0 20-8 23-11 31M0 24-5 29-6 35M0 13 7 9 10 3M0 16 8 14 11 10M0 20 8 23 11 31M0 24 5 29 6 35" fill="none" stroke="#f3f5ef" stroke-width="1.5"/>
+<ellipse cy="18" rx="2.3" ry="7" fill="#f3f5ef"/>
+</g>
+<circle cx="-5" cy="-40" r="5" fill="#f04956"/>
+</g>
+</defs>
+<rect width="900" height="410" fill="url(#sky)"/><ellipse cx="470" cy="285" rx="500" ry="210" fill="url(#glow)"/>
+<circle cx="730" cy="89" r="24" fill="#b7bfd1" opacity=".14"/><circle cx="739" cy="82" r="24" fill="#19273b"/>
+<g id="farCity"></g>
+<path d="M110 360Q450 340 810 368" stroke="#d6b5ad" stroke-opacity=".2" fill="none"/>
+<rect width="900" height="410" fill="url(#grid)"/>
+<g opacity=".8"><path d="M0 43H92V410H0Z" fill="url(#tower)"/><path d="M92 43 122 65V410H92Z" fill="#101b2d"/><rect y="55" width="92" height="355" fill="url(#windows)"/><path d="M0 43H92L122 65H0Z" fill="#3d4656"/><path d="M0 108h92m-92 100h92m-92 100h92" stroke="#435164" opacity=".4"/><rect x="802" y="120" width="98" height="290" fill="url(#tower)"/><rect x="813" y="133" width="87" height="277" fill="url(#windows)"/><path d="m802 120-20 16v274h20" fill="#101a2c"/><path d="M802 120h98v8h-98Z" fill="#455065"/><path d="M850 120V75h3v45" stroke="#344359"/></g>
+<path d="M25 42 450 28 860 120" stroke="#b3bfce" stroke-opacity=".25" stroke-width="1" fill="none"/>
+<path d="M450 28V300" stroke="#bdcde5" stroke-opacity=".25" stroke-dasharray="3 6"/>
+<path d="M233.5 153A250 250 0 0 0 666.5 153" fill="none" stroke="#d8e9ff" stroke-opacity=".25" stroke-width="1.5" stroke-dasharray="4 6"/>
+<path id="trail" fill="none" stroke="#f15a6b" stroke-width="3" stroke-opacity=".48"/>
+<path d="M180 278H720" stroke="#8ba0bd" stroke-opacity=".35" stroke-dasharray="5 7"/>
+<g font-family="monospace" font-size="11" fill="#a9bad0"><text x="188" y="302">h = 0</text><text x="466" y="24">ANCLAJE FIJO</text></g>
+<line id="heightLine" x1="730" y1="153" x2="730" y2="278" stroke="#8ccaff" stroke-width="1.5" stroke-dasharray="3 4"/>
+<path id="heightCap" stroke="#8ccaff" stroke-width="1.5" fill="none"/>
+<text id="heightLabel" x="740" y="210" fill="#a1d4ff" font-family="monospace" font-size="11">5.00 m</text>
+<line id="webShadow" x1="450" y1="28" x2="250" y2="120" stroke="#a4c8f6" stroke-width="4" opacity=".15"/>
+<line id="web" x1="450" y1="28" x2="250" y2="120" stroke="#e8f2ff" stroke-width="1.8"/>
+<circle cx="450" cy="28" r="7" stroke="#aebed1" stroke-opacity=".25" fill="none"/><circle cx="450" cy="28" r="3" fill="#ecf5ff"/>
+<g id="hero" transform="translate(233.5 153)"><ellipse cx="0" cy="18" rx="30" ry="43" fill="#e83650" opacity=".13" filter="url(#soft)"/><use href="#hero-art"/></g>
+<g font-family="Arial,sans-serif" font-size="10" text-anchor="middle"><g transform="translate(233.5 345)"><circle r="11" fill="#263c52" stroke="#7dbdf2" stroke-opacity=".5"/><text y="3.5" fill="#9ed6ff">A</text><text y="25" fill="#b0bbcd" letter-spacing="1">ALTURA MÁXIMA</text></g><g transform="translate(450 345)"><circle r="11" fill="#442635" stroke="#f85367" stroke-opacity=".7"/><text y="3.5" fill="#ff8290">B</text><text y="25" fill="#b0bbcd" letter-spacing="1">RAPIDEZ MÁXIMA</text></g><g transform="translate(666.5 345)"><circle r="11" fill="#263c52" stroke="#7dbdf2" stroke-opacity=".5"/><text y="3.5" fill="#9ed6ff">C</text><text y="25" fill="#b0bbcd" letter-spacing="1">OTRO EXTREMO</text></g></g>
+</svg>
+<div class="scene-value">
+<small>RAPIDEZ ACTUAL</small>
+<div>
+<strong id="speed">0.00</strong><span>m/s</span>
+</div>
+</div>
+<span class="scene-disclaimer">Animación ilustrativa · sin escala temporal</span>
+</div>
+<div class="transport">
+<button id="play" class="primary"><svg><use href="#pause-icon"/></svg><span>Pausar</span></button><button id="reset" class="icon-button reset" aria-label="Reiniciar con los valores iniciales" title="Reiniciar">↺</button>
+<div class="position-control">
+<label for="position">EXPLORA EL RECORRIDO <output id="positionValue">0%</output></label><input id="position" type="range" min="0" max="100" value="0" step="0.1" aria-label="Posición en el recorrido">
+</div>
+<button id="slow" class="speed-button" aria-pressed="false" title="Cambiar la velocidad de la animación">1×</button>
+</div>
+<div class="checkpoint-row">
+<button data-point="0"><span>A</span> Arriba</button><button data-point="50"><span>B</span> Abajo</button><button data-point="100"><span>C</span> Otro extremo</button>
+</div>
+</section>
+<section class="energy-card" aria-label="Distribución de energía">
+<div class="energy-head">
+<h2>La energía se transforma.</h2><span>El total se conserva <svg viewBox="0 0 18 18"><path d="m4 9 3 3 7-7" fill="none" stroke="currentColor" stroke-width="2"/></svg></span>
+</div>
+<div class="energy-figures">
+<div>
+<small><i class="blue-dot"></i> POTENCIAL <span>altura</span></small><strong id="ep">3,433.5</strong><b>J</b>
+</div>
+<span class="exchange">⇄</span>
+<div>
+<small><i class="red-dot"></i> CINÉTICA <span>movimiento</span></small><strong id="ec">0.0</strong><b>J</b>
+</div>
+<div class="total-figure">
+<small>ENERGÍA TOTAL</small><strong id="et">3,433.5</strong><b>J</b>
+</div>
+</div>
+<div class="energy-track" role="img" id="energyTrack" aria-label="Distribución de energía">
+<div id="potentialFill">
+</div>
+<div id="kineticFill">
+</div>
+</div>
+<div class="energy-percent">
+<span id="potentialPercent">100% potencial</span><span id="kineticPercent">0% cinética</span>
+</div>
+</section>
+</div>
+<aside class="side-column">
+<section class="parameters">
+<div class="card-heading">
+<span class="section-index">01</span><h2>Diseña tu balanceo</h2><span class="adjust-icon">☷</span>
+</div>
+<p class="card-intro">Cambia una variable. Observa qué pasa.</p>
+<div class="input-group">
+<label for="mass">Masa del héroe <span><output id="massValue">70</output> <small>kg</small></span></label><input id="mass" type="range" min="40" max="140" value="70">
+<div class="range-labels">
+<span>40 kg</span><span>140 kg</span>
+</div>
+</div>
+<div class="input-group">
+<label for="initialHeight">Altura inicial <span><output id="initialHeightValue">5</output> <small>m</small></span></label><input id="initialHeight" type="range" min="1" max="15" value="5">
+<div class="range-labels">
+<span>1 m</span><span>15 m</span>
+</div>
+</div>
+<div class="fixed-values">
+<div>
+<span>Gravedad terrestre</span><strong>9.81 <small>m/s²</small></strong>
+</div>
+<div>
+<span>Longitud de telaraña</span><strong id="lengthValue">10 m</strong>
+</div>
+</div>
+<p class="geometry-note">Extremos a ±60°. La longitud es el doble de la altura inicial.</p>
+<div class="preset-label">
+PRUEBA UN ESCENARIO
+</div>
+<div class="presets">
+<button data-preset="base" class="active">Clásico</button><button data-preset="mass">Más masa</button><button data-preset="height">Más altura</button>
+</div>
+</section>
+<section class="insight">
+<div class="insight-heading">
+<span class="spark">✦</span><span>LO QUE ESTÁ PASANDO</span>
+</div>
+<h3 id="insightTitle">Todo empieza con la altura.</h3><p id="insightText">En el extremo, la energía es potencial. Spider-Man está a punto de comenzar su descenso.</p>
+<div class="work-value">
+<span>Trabajo de la gravedad<small>Desde el inicio hasta este punto</small></span><strong><span id="work">0.0</span> <small>J</small></strong>
+</div>
+</section>
+<button class="code-invite" data-go="codigo"><span class="code-icon">&lt;/&gt;</span><span>La física en <strong>5 cuentas.</strong><small>Abre el código para explicarlo.</small></span><b>↗</b></button>
+</aside>
+</div>
+<div class="bottom-note">
+<span>✧ <b>Tu siguiente descubrimiento:</b> duplica la masa. ¿También cambia la rapidez?</span><button data-go="fisica">Entiende por qué <span>→</span></button>
+</div>
+</section>
+<section id="view-fisica" class="view" hidden>
+<div class="page-heading">
+<div>
+<div class="eyebrow">
+<span></span> APRENDE <i>/</i> SIN COMPLICACIONES
+</div>
+<h1>Del balanceo a <em>la fórmula.</em></h1><p>Cinco cuentas. Una sola idea: la energía no desaparece, se transforma.</p>
+</div>
+<button class="outline-button" data-go="laboratorio">← Volver al laboratorio</button>
+</div>
+<div class="theory-grid">
+<div class="formula-list" id="formulas">
+<article>
+<span class="formula-number">01</span>
+<div>
+<h2>La energía con la que empieza</h2><p>Parte del reposo. Toda su energía inicial depende de la altura.</p><code>E = m × g × h₀</code>
+<div class="substitution" data-eq="total">
+</div>
+</div>
+</article>
+<article>
+<span class="formula-number">02</span>
+<div>
+<h2>Lo que todavía conserva como altura</h2><p>Cuanto más baja su posición, menor es su energía potencial.</p><code>Ep = m × g × h</code>
+<div class="substitution" data-eq="potential">
+</div>
+</div>
+</article>
+<article>
+<span class="formula-number">03</span>
+<div>
+<h2>Lo que se ha convertido en movimiento</h2><p>Restamos la energía potencial al total. Eso es energía cinética.</p><code>Ec = E − Ep</code>
+<div class="substitution" data-eq="kinetic">
+</div>
+</div>
+</article>
+<article>
+<span class="formula-number">04</span>
+<div>
+<h2>La rapidez en ese punto</h2><p>Despejamos la rapidez de Ec = ½mv². La raíz se obtiene con sqrt.</p><code>v = √(2 × Ec / m)</code>
+<div class="substitution" data-eq="speed">
+</div>
+</div>
+</article>
+<article>
+<span class="formula-number">05</span>
+<div>
+<h2>El trabajo que hizo la gravedad</h2><p>Desde el inicio, es igual a la ganancia de energía cinética.</p><code>Wg = m × g × (h₀ − h)</code>
+<div class="substitution" data-eq="work">
+</div>
+</div>
+</article>
+</div>
+<aside class="theory-aside">
+<section class="concept-card">
+<span class="eyebrow">EL DICCIONARIO DEL HÉROE</span><dl><dt>m · Masa</dt><dd>Cuánta masa tiene el héroe, en kilogramos.</dd><dt>g · Gravedad</dt><dd>9.81 m/s² en este modelo terrestre.</dd><dt>h₀ y h · Alturas</dt><dd>La inicial y la actual, medidas desde el punto más bajo.</dd><dt>J · Joule</dt><dd>Unidad para medir energía y trabajo.</dd><dt>v · Rapidez</dt><dd>Qué tan rápido se mueve, en m/s; no indica la dirección.</dd></dl>
+</section>
+<section class="challenge">
+<span class="eyebrow">PIÉNSALO ANTES DE PROBAR</span><h3>Si duplicas la masa, ¿se duplica la rapidez?</h3>
+<div>
+<button data-answer="yes">Sí, se duplica</button><button data-answer="no">No, es igual</button>
+</div>
+<p id="answerFeedback" role="status">Compara el escenario clásico con «Más masa».</p>
+</section>
+<section class="source-card">
+<h3>La base del proyecto</h3><p>PROBLEMARIO DINÁMICA, página 1, tema 3: trabajo, energía y potencia. Aplicamos sus expresiones de energía potencial, cinética y conservación de energía a un balanceo ideal.</p><button id="assumptions" class="text-button">Ver los límites del modelo ↗</button>
+</section>
+</aside>
+</div>
+</section>
+<section id="view-codigo" class="view" hidden>
+<div class="page-heading">
+<div>
+<div class="eyebrow">
+<span></span> COMPRENDE <i>/</i> EXPLICA <i>/</i> PRESENTA
+</div>
+<h1>Un héroe. <em>Cinco cuentas.</em></h1><p>La física cabe en unas líneas. El dibujo y los controles se encargan del resto.</p>
+</div>
+<a id="downloadPython" href="spider_energia.py" download class="primary">↓ Descargar Python</a>
+</div>
+<div class="code-layout">
+<section class="code-window">
+<div class="code-top">
+<div class="window-dots">
+<i></i><i></i><i></i>
+</div>
+<div class="code-tabs" role="group" aria-label="Lenguaje del código">
+<button id="pythonTab" class="active" aria-pressed="true">Python</button><button id="jsTab" aria-pressed="false">JavaScript</button>
+</div>
+<button id="copyCode" class="text-button">Copiar</button>
+</div>
+<div class="code-file" id="codeFilename">
+fisica.py
+</div>
+<pre><code id="codeContent"></code></pre>
+<div class="code-bottom">
+<span id="codeLanguageNote">Python para tu entrega · versión equivalente al cálculo del navegador</span><span id="copyStatus" role="status"></span>
+</div>
+</section>
+<aside class="code-explanation">
+<h2>Así lo explicas en clase.</h2><ol><li><strong>Recibimos tres datos.</strong><p>La masa, la altura inicial y la altura de la posición elegida.</p></li><li><strong>Hacemos cinco cuentas.</strong><p>Multiplicar, restar y sacar una raíz cuadrada. Cada línea corresponde a una fórmula.</p></li><li><strong>Devolvemos los resultados.</strong><p>La interfaz los convierte en cifras y barras de colores.</p></li></ol>
+<div class="honest-note">
+<strong>¿Qué ejecuta esta página?</strong><p>El navegador usa JavaScript. La pestaña Python muestra las mismas fórmulas; puedes descargar un programa de consola para entregarlo y ejecutarlo con Python 3.</p>
+</div>
+<a id="downloadWeb" href="SpiderLab_Energia.html" download class="outline-button">↓ Descargar versión HTML</a><small class="download-note">Un archivo que puedes abrir sin conexión.</small>
+</aside>
+</div>
+<details class="animation-explanation">
+<summary>¿Y cómo funciona la animación?</summary><p>Un ciclo visual cambia suavemente la posición del personaje entre los extremos. Para cada posición, calculamos la altura con <code>h = L × (1 − cos θ)</code> y aplicamos las cinco cuentas. El seno y el coseno sirven para dibujar el arco. La animación no predice el tiempo real del balanceo ni calcula su período.</p><p>Cuando mueves el deslizador, eliges una posición y la reproducción se pausa. Así puedes explicar un punto sin que cambien sus números. En ambos extremos la rapidez calculada es cero; en el centro es máxima.</p>
+</details>
+</section>
+</main>
+<footer>
+<span><svg><use href="#spider-icon"/></svg> SPIDERLAB <i>/</i> APRENDE EN MOVIMIENTO</span><span>Proyecto educativo no oficial · Inspirado en Spider-Man</span><button id="footerHelp">Acerca del modelo</button>
+</footer>
+<dialog id="helpDialog">
+<button id="closeDialog" class="icon-button dialog-close" aria-label="Cerrar explicación">×</button><span class="eyebrow">ANTES DE LANZAR LA TELARAÑA</span><h2>Un modelo sencillo.<br>Física con sentido.</h2><p>El héroe parte del reposo y se representa como una masa puntual. El anclaje está fijo y la telaraña no se estira ni tiene masa. No hay resistencia del aire ni pérdidas por rozamiento.</p><ul><li><strong>Altura cero:</strong> el punto más bajo del recorrido.</li><li><strong>Extremos a ±60°:</strong> L = 2h₀. Cambiar la altura también cambia la longitud.</li><li><strong>Animación ilustrativa:</strong> el ritmo visual no representa tiempo físico; las energías y la rapidez sí corresponden a cada posición.</li><li><strong>La tensión no realiza trabajo:</strong> es perpendicular al desplazamiento en el modelo ideal.</li></ul><p>No calculamos potencia, tensión ni período. En el punto inferior hay aceleración hacia el anclaje, aunque la rapidez sea máxima.</p><button id="understood" class="primary">Entendido. A experimentar →</button>
+</dialog>
+<script>
+/* Las cinco cuentas. Mismas fórmulas que la versión Python. */
+function calcular(masa, alturaInicial, alturaActual) {
+  const gravedad = 9.81;
+  const total = masa * gravedad * alturaInicial;
+  const potencial = masa * gravedad * alturaActual;
+  const cinetica = Math.max(0, total - potencial);
+  const rapidez = Math.sqrt(2 * cinetica / masa);
+  const trabajo = masa * gravedad * (alturaInicial - alturaActual);
+  return {
+    total,
+    potencial,
+    cinetica,
+    rapidez,
+    trabajo
+  };
+}
+
+</script><script>
+/* Spider Lab: la interfaz usa calcular() de physics.js. */
+const $ = id => document.getElementById(id);
+const reducido = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const estado = {
+  masa: 70,
+  altura: 5,
+  posicion: 0,
+  fase: 0,
+  reproduciendo: !reducido,
+  lento: false,
+  vista: 'laboratorio'
+};
+// Masa que muestra el dibujo durante la transición; las cuentas usan estado.masa.
+let masaVisual = estado.masa;
+const numero = (n, d = 1) => n.toLocaleString('es-MX', {
+  minimumFractionDigits: d,
+  maximumFractionDigits: d
+});
+let ultimaMarca = 0,
+  ultimoDibujo = 0,
+  transicion = null,
+  paso = 0,
+  lenguaje = 'python';
+const python = `from math import sqrt
+
+def calcular(masa, altura_inicial, altura_actual):
+    gravedad = 9.81
+
+    # 1. La energía con la que empieza
+    total = masa * gravedad * altura_inicial
+    # 2. La energía que conserva como altura
+    potencial = masa * gravedad * altura_actual
+    # 3. La energía convertida en movimiento
+    cinetica = total - potencial
+    # 4. Despejamos la rapidez de Ec = 1/2 mv²
+    rapidez = sqrt(2 * cinetica / masa)
+    # 5. Trabajo de la gravedad desde el inicio
+    trabajo = masa * gravedad * (altura_inicial - altura_actual)
+
+    return total, potencial, cinetica, rapidez, trabajo`;
+const javascript = `function calcular(masa, alturaInicial, alturaActual) {
+  const gravedad = 9.81;
+
+  // 1. La energía con la que empieza
+  const total = masa * gravedad * alturaInicial;
+  // 2. La energía que conserva como altura
+  const potencial = masa * gravedad * alturaActual;
+  // 3. Energía cinética (sin errores de redondeo)
+  const cinetica = Math.max(0, total - potencial);
+  // 4. Despejamos la rapidez de Ec = 1/2 mv²
+  const rapidez = Math.sqrt(2 * cinetica / masa);
+  // 5. Trabajo de la gravedad desde el inicio
+  const trabajo = masa * gravedad * (alturaInicial - alturaActual);
+
+  return { total, potencial, cinetica, rapidez, trabajo };
+}`;
+const pythonDescarga = python + `
+
+# Programa de consola: ejecutar con Python 3.
+if __name__ == "__main__":
+    from math import isfinite
+    try:
+        m = float(input("Masa del héroe (kg): ").replace(",", "."))
+        h0 = float(input("Altura inicial (m): ").replace(",", "."))
+        h = float(input("Altura actual (m): ").replace(",", "."))
+        if not all(isfinite(x) for x in (m, h0, h)):
+            raise ValueError("Usa números finitos.")
+        if m <= 0 or h0 <= 0 or not 0 <= h <= h0:
+            raise ValueError("Se requiere masa > 0, altura inicial > 0 y 0 <= h <= h0.")
+        total, ep, ec, v, trabajo = calcular(m, h0, h)
+        print(f"Energía total: {total:.2f} J")
+        print(f"Potencial: {ep:.2f} J | Cinética: {ec:.2f} J")
+        print(f"Rapidez: {v:.2f} m/s")
+        print(f"Trabajo de la gravedad: {trabajo:.2f} J")
+    except ValueError as error:
+        print("Revisa los datos:", error)
+`;
+
+// Ciudad vectorial: decorativa; no interviene en las cuentas.
+const ns = 'http://www.w3.org/2000/svg';
+for (let capa = 0; capa < 2; capa++) {
+  for (let i = 0; i < 21; i++) {
+    const x = i * 46 - 20 + capa * 13,
+      alto = 35 + Math.abs(Math.sin(i * 7.13 + capa)) * 95;
+    const y = 360 - alto + capa * 30,
+      ancho = 24 + (i % 3) * 8;
+    const grupo = document.createElementNS(ns, 'g');
+    const edificio = document.createElementNS(ns, 'path');
+    const cima = i % 5 === 0 ? `M${x} ${y}h${ancho/2-3}v-25h6v25h${ancho/2-3}` : `M${x} ${y}h${ancho}`;
+    edificio.setAttribute('d', cima + `V410H${x}Z`);
+    edificio.setAttribute('fill', capa ? '#142239' : '#28394e');
+    grupo.append(edificio);
+    const luces = document.createElementNS(ns, 'rect');
+    for (const [k, v] of Object.entries({
+        x,
+        y,
+        width: ancho,
+        height: 410 - y,
+        fill: 'url(#farwindows)'
+      })) luces.setAttribute(k, v);
+    grupo.append(luces);
+    $('farCity').append(grupo);
+  }
+}
+
+// Más masa = abdomen y cintura más redondeados, brazos y piernas más gruesos.
+// Estas proporciones son ilustrativas; no representan una fórmula corporal.
+function actualizarSilueta(masa) {
+  const cambio = (Math.max(40, Math.min(140, masa)) - 70) / 70;
+  const hombros = 13 + 4 * cambio;
+  const abdomen = 13 + 13 * cambio;
+  const cadera = 8 + 6 * cambio;
+  const brazo = 10 + 4 * cambio;
+  const pierna = 12 + 5 * cambio;
+  const trazar = (id, forma) => $(id).setAttribute('d', forma);
+
+  trazar('hero-torso', `M${-hombros} 3 Q0 -5 ${hombros} 3
+    C${hombros + 1} 11 ${abdomen} 17 ${abdomen} 24
+    C${abdomen} 34 ${cadera + 3} 40 ${cadera} 40 H${-cadera}
+    C${-cadera - 3} 40 ${-abdomen} 34 ${-abdomen} 24
+    C${-abdomen} 17 ${-hombros - 1} 11 ${-hombros} 3 Z`);
+  const panel = lado => `M${lado * hombros} 12
+    C${lado * abdomen} 20 ${lado * abdomen} 30 ${lado * cadera} 38
+    L${lado * (cadera - 4)} 38
+    C${lado * (abdomen - 6)} 30 ${lado * (abdomen - 6)} 20 ${lado * (hombros - 6)} 16 Z`;
+  trazar('hero-sides', panel(-1) + panel(1));
+  trazar('hero-highlight', `M-4 4 Q${-abdomen + 2} 18 -4 34
+    Q${-abdomen + 8} 18 -1 5 Z`);
+  trazar('hero-torso-web', `M${3 - hombros} 7 Q0 10 ${hombros - 3} 7
+    M${-abdomen * .75} 15 Q0 20 ${abdomen * .75} 15
+    M${-abdomen * .85} 24 Q0 29 ${abdomen * .85} 24
+    M${-cadera} 33 Q0 37 ${cadera} 33 M0 3 V38`);
+  $('hero-emblem').setAttribute('transform', `scale(${1 + .18 * cambio} 1)`);
+
+  // La palma permanece en (-5, -40), el mismo punto que usa la telaraña.
+  const brazos = `M${6 - hombros} 10 L${-23 - 4 * cambio} -6 L-5 -39
+    M${hombros - 5} 11 L28 21 L36 7`;
+  const piernas = `M${1 - cadera} 33 L-24 58 L-46 67
+    M${cadera - 5} 33 L26 49 L23 77`;
+  for (const [id, forma, ancho] of [
+    ['hero-arm-outline', brazos, brazo + 3], ['hero-arms', brazos, brazo],
+    ['hero-leg-outline', piernas, pierna + 4], ['hero-legs', piernas, pierna]
+  ]) {
+    trazar(id, forma);
+    $(id).setAttribute('stroke-width', ancho);
+  }
+}
+
+function sincronizarReproduccion() {
+  $('play').querySelector('use').setAttribute('href', estado.reproduciendo ? '#pause-icon' : '#play-icon');
+  $('play').querySelector('span').textContent = estado.reproduciendo ? 'Pausar' : 'Reproducir';
+  $('playStatus').textContent = estado.reproduciendo ? 'EN MOVIMIENTO' : 'EXPLORACIÓN EN PAUSA';
+  $('slow').textContent = estado.lento ? '0.5×' : '1×';
+  $('slow').setAttribute('aria-pressed', String(estado.lento));
+}
+
+function pausar() {
+  estado.reproduciendo = false;
+  sincronizarReproduccion()
+}
+
+function sincronizarControles() {
+  if (reducido) {
+    masaVisual = estado.masa;
+    actualizarSilueta(masaVisual);
+  }
+  $('mass').value = estado.masa;
+  $('massValue').textContent = estado.masa;
+  $('initialHeight').value = estado.altura;
+  $('initialHeightValue').textContent = estado.altura;
+  $('lengthValue').textContent = 2 * estado.altura + ' m';
+  for (const id of ['mass', 'initialHeight', 'position']) {
+    const c = $(id);
+    c.style.setProperty('--fill', 100 * (+c.value - +c.min) / (+c.max - +c.min) + '%');
+  }
+  document.querySelectorAll('[data-preset]').forEach(b => {
+    const seleccionado = b.dataset.preset === 'base' && estado.masa === 70 && estado.altura === 5 || b.dataset.preset === 'mass' && estado.masa === 140 && estado.altura === 5 || b.dataset.preset === 'height' && estado.masa === 70 && estado.altura === 10;
+    b.classList.toggle('active', seleccionado);
+    b.setAttribute('aria-pressed', String(seleccionado));
+  });
+}
+
+function posicionar(p, suave = false) {
+  pausar();
+  if (suave && !reducido) transicion = {
+    desde: estado.posicion,
+    hasta: p,
+    inicio: performance.now()
+  };
+  else {
+    transicion = null;
+    estado.posicion = p;
+    estado.fase = Math.acos(1 - 2 * p / 100);
+    actualizar()
+  }
+}
+
+function actualizar() {
+  const angulo = (-60 + 120 * estado.posicion / 100) * Math.PI / 180;
+  const h = Math.min(estado.altura, Math.max(0, 2 * estado.altura * (1 - Math.cos(angulo))));
+  const r = calcular(estado.masa, estado.altura, h);
+  $('position').value = estado.posicion;
+  $('positionValue').textContent = numero(estado.posicion, 0) + '%';
+  $('position').style.setProperty('--fill', estado.posicion + '%');
+  $('speed').textContent = numero(r.rapidez, 2);
+  $('ep').textContent = numero(r.potencial);
+  $('ec').textContent = numero(r.cinetica);
+  $('et').textContent = numero(r.total);
+  $('work').textContent = numero(r.trabajo);
+  const porcentaje = 100 * r.potencial / r.total;
+  $('potentialFill').style.width = porcentaje + '%';
+  $('potentialPercent').textContent = numero(porcentaje, 0) + '% potencial';
+  $('kineticPercent').textContent = numero(100 - porcentaje, 0) + '% cinética';
+  $('energyTrack').setAttribute('aria-label', `${numero(porcentaje,0)}% de energía potencial y ${numero(100-porcentaje,0)}% de energía cinética. Total: ${numero(r.total)} joules.`);
+  const x = 450 + 250 * Math.sin(angulo),
+    y = 28 + 250 * Math.cos(angulo),
+    rotacion = -angulo * .3;
+  $('hero').setAttribute('transform', `translate(${x} ${y}) rotate(${rotacion*180/Math.PI})`);
+  const manoX = x - 5 * Math.cos(rotacion) + 40 * Math.sin(rotacion),
+    manoY = y - 5 * Math.sin(rotacion) - 40 * Math.cos(rotacion);
+  for (const id of ['web', 'webShadow']) {
+    $(id).setAttribute('x2', manoX);
+    $(id).setAttribute('y2', manoY)
+  }
+  $('heightLine').setAttribute('y1', y);
+  $('heightCap').setAttribute('d', `M725 ${y}h10M725 278h10`);
+  $('heightLabel').setAttribute('y', Math.min(274, (y + 278) / 2 + 3));
+  $('heightLabel').textContent = numero(h, 2) + ' m';
+  const puntos = [];
+  for (let i = 0; i <= 35; i++) {
+    const a = -Math.PI / 3 + (angulo + Math.PI / 3) * i / 35;
+    puntos.push(`${i?'L':'M'}${450+250*Math.sin(a)},${28+250*Math.cos(a)}`)
+  }
+  $('trail').setAttribute('d', puntos.join(' '));
+  document.querySelectorAll('[data-point]').forEach(b => {
+    const activo = Math.abs(estado.posicion - +b.dataset.point) < .15;
+    b.classList.toggle('active', activo);
+    b.setAttribute('aria-pressed', String(activo))
+  });
+  let titulo, explicacion;
+  if (estado.posicion < 1e-7) {
+    titulo = 'Todo empieza con la altura.';
+    explicacion = 'En el extremo inicial, toda la energía es potencial. La rapidez es cero: el héroe parte del reposo.'
+  } else if (estado.posicion > 100 - 1e-7) {
+    titulo = 'La energía vuelve a ser altura.';
+    explicacion = 'En el otro extremo se recupera la altura inicial. La rapidez vuelve a cero antes de regresar.'
+  } else if (Math.abs(estado.posicion - 50) < 1e-7) {
+    titulo = 'Aquí alcanza su mayor rapidez.';
+    explicacion = 'En el punto más bajo, toda la energía es cinética. La energía potencial es cero, pero el total no cambia.'
+  } else if (porcentaje < 5) {
+    titulo = 'Cerca del centro, más rapidez.';
+    explicacion = 'Casi toda la energía está en el movimiento. El máximo de rapidez se alcanza justo en el punto B.'
+  } else {
+    titulo = 'Altura y movimiento se intercambian.';
+    explicacion = 'Al bajar, la energía potencial pasa a cinética. Al subir ocurre lo contrario. La suma siempre es la misma.'
+  }
+  $('insightTitle').textContent = titulo;
+  $('insightText').textContent = explicacion;
+  const sustituciones = {
+    total: `${estado.masa} × 9.81 × ${estado.altura} = ${numero(r.total)} J`,
+    potential: `${estado.masa} × 9.81 × ${numero(h,2)} ≈ ${numero(r.potencial)} J`,
+    kinetic: `${numero(r.total)} − ${numero(r.potencial)} ≈ ${numero(r.cinetica)} J`,
+    speed: `√(2 × ${numero(r.cinetica)} / ${estado.masa}) ≈ ${numero(r.rapidez,2)} m/s`,
+    work: `${estado.masa} × 9.81 × (${estado.altura} − ${numero(h,2)}) ≈ ${numero(r.trabajo)} J`
+  };
+  document.querySelectorAll('[data-eq]').forEach(el => el.textContent = sustituciones[el.dataset.eq]);
+}
+
+$('play').onclick = () => {
+  transicion = null;
+  estado.reproduciendo = !estado.reproduciendo;
+  sincronizarReproduccion()
+};
+$('reset').onclick = () => {
+  pausar();
+  transicion = null;
+  Object.assign(estado, {
+    masa: 70,
+    altura: 5,
+    posicion: 0,
+    fase: 0,
+    lento: false
+  });
+  sincronizarControles();
+  sincronizarReproduccion();
+  actualizar()
+};
+$('slow').onclick = () => {
+  estado.lento = !estado.lento;
+  sincronizarReproduccion()
+};
+$('position').oninput = () => posicionar(+$('position').value);
+for (const [id, clave] of [
+    ['mass', 'masa'],
+    ['initialHeight', 'altura']
+  ]) {
+  $(id).oninput = () => {
+    pausar();
+    transicion = null;
+    estado[clave] = +$(id).value;
+    sincronizarControles();
+    actualizar()
+  };
+}
+document.querySelectorAll('[data-point]').forEach(b => b.onclick = () => posicionar(+b.dataset.point, true));
+document.querySelectorAll('[data-preset]').forEach(b => b.onclick = () => {
+  pausar();
+  transicion = null;
+  estado.masa = b.dataset.preset === 'mass' ? 140 : 70;
+  estado.altura = b.dataset.preset === 'height' ? 10 : 5;
+  sincronizarControles();
+  actualizar();
+});
+
+function mostrarVista(v) {
+  if (!['laboratorio', 'fisica', 'codigo'].includes(v)) v = 'laboratorio';
+  if (v !== 'laboratorio') pausar();
+  estado.vista = v;
+  document.querySelectorAll('.view').forEach(el => el.hidden = el.id !== 'view-' + v);
+  document.querySelectorAll('[data-view]').forEach(b => {
+    b.classList.toggle('active', b.dataset.view === v);
+    if (b.dataset.view === v) b.setAttribute('aria-current', 'page');
+    else b.removeAttribute('aria-current')
+  });
+  history.replaceState(null, '', '#' + v);
+  window.scrollTo({
+    top: 0,
+    behavior: 'instant'
+  });
+}
+document.querySelectorAll('[data-view],[data-go]').forEach(b => b.onclick = () => mostrarVista(b.dataset.view || b.dataset.go));
+window.addEventListener('hashchange', () => mostrarVista(location.hash.slice(1)));
+
+function abrirAyuda() {
+  pausar();
+  $('helpDialog').showModal()
+}
+for (const id of ['modelHelp', 'assumptions', 'footerHelp']) $(id).onclick = abrirAyuda;
+for (const id of ['closeDialog', 'understood']) $(id).onclick = () => $('helpDialog').close();
+$('helpDialog').addEventListener('click', e => {
+  if (e.target === $('helpDialog')) {
+    const r = $('helpDialog').getBoundingClientRect();
+    if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) $('helpDialog').close()
+  }
+});
+
+// Guía breve para la exposición: cinco estados, sin simulación temporal.
+const pasos = [{
+  titulo: 'Primero, haz una predicción.',
+  texto: '70 kg y 5 m. Toda la energía está en la altura: 3,433.5 J. Pregunta al grupo dónde será mayor la rapidez.',
+  m: 70,
+  h: 5,
+  p: 0
+}, {
+  titulo: 'De altura a movimiento.',
+  texto: 'Abajo, los 3,433.5 J son energía cinética. La rapidez llega a 9.90 m/s. El total de energía sigue siendo el mismo.',
+  m: 70,
+  h: 5,
+  p: 50
+}, {
+  titulo: 'Duplica la masa. Compara la rapidez.',
+  texto: 'Ahora son 140 kg. La energía se duplica, pero la rapidez sigue en 9.90 m/s: la masa se cancela al despejar la fórmula.',
+  m: 140,
+  h: 5,
+  p: 50
+}, {
+  titulo: 'Duplica la altura inicial.',
+  texto: 'Volvemos a 70 kg y subimos a 10 m. Abajo la rapidez es 14.01 m/s: aumenta por √2, no al doble.',
+  m: 70,
+  h: 10,
+  p: 50
+}, {
+  titulo: 'Cierra el recorrido. Explica la idea.',
+  texto: 'Con los datos originales, en el otro extremo toda la energía vuelve a ser potencial. Ahora abre las cinco cuentas para enseñar el código.',
+  m: 70,
+  h: 5,
+  p: 100
+}];
+
+function aplicarPaso() {
+  const s = pasos[paso];
+  pausar();
+  transicion = null;
+  estado.masa = s.m;
+  estado.altura = s.h;
+  posicionar(s.p);
+  sincronizarControles();
+  $('tourIndex').textContent = `0${paso+1} / 05`;
+  $('tourTitle').textContent = s.titulo;
+  $('tourText').textContent = s.texto;
+  $('tourBack').disabled = paso === 0;
+  $('tourNext').textContent = paso === 4 ? 'Ver las cinco cuentas →' : 'Siguiente →';
+}
+
+function cerrarTour() {
+  $('tour').hidden = true;
+  document.body.classList.remove('presenting')
+}
+document.querySelectorAll('.tour-open').forEach(b => b.onclick = () => {
+  mostrarVista('laboratorio');
+  $('tour').hidden = false;
+  document.body.classList.add('presenting');
+  paso = 0;
+  aplicarPaso()
+});
+$('tourClose').onclick = cerrarTour;
+$('tourBack').onclick = () => {
+  if (paso > 0) {
+    paso--;
+    aplicarPaso()
+  }
+};
+$('tourNext').onclick = () => {
+  if (paso < 4) {
+    paso++;
+    aplicarPaso()
+  } else {
+    cerrarTour();
+    mostrarVista('codigo')
+  }
+};
+document.querySelectorAll('[data-answer]').forEach(b => b.onclick = () => {
+  document.querySelectorAll('[data-answer]').forEach(x => x.classList.toggle('chosen', x === b));
+  $('answerFeedback').textContent = b.dataset.answer === 'no' ? 'Exacto. v = √[2g(h₀ − h)]. La masa se cancela: cambia la energía, pero no la rapidez a igual altura.' : 'No en este modelo. Al duplicar la masa también se duplica la energía cinética; en v = √(2Ec/m), ambos factores se cancelan.'
+});
+
+// Código de lectura: se insertan nodos de texto, nunca contenido del usuario.
+function pintarCodigo(tipo) {
+  lenguaje = tipo;
+  const codigo = tipo === 'python' ? python : javascript;
+  $('codeContent').replaceChildren();
+  codigo.split('\n').forEach((linea, i) => {
+    const fila = document.createElement('span');
+    fila.className = 'code-line';
+    const n = document.createElement('span');
+    n.className = 'line-number';
+    n.textContent = i + 1;
+    fila.append(n);
+    if (linea.trim().startsWith('#') || linea.trim().startsWith('//')) {
+      const c = document.createElement('span');
+      c.className = 'comment';
+      c.textContent = linea;
+      fila.append(c)
+    } else {
+      const patron = /(\b(?:from|import|def|return|function|const)\b|\b(?:calcular|sqrt|max)\b|\b\d+(?:\.\d+)?\b)/g;
+      let fin = 0;
+      for (const m of linea.matchAll(patron)) {
+        fila.append(document.createTextNode(linea.slice(fin, m.index)));
+        const c = document.createElement('span');
+        c.className = /^\d/.test(m[0]) ? 'num' : /calcular|sqrt|max/.test(m[0]) ? 'fn' : 'kw';
+        c.textContent = m[0];
+        fila.append(c);
+        fin = m.index + m[0].length
+      }
+      fila.append(document.createTextNode(linea.slice(fin)))
+    }
+    $('codeContent').append(fila);
+  });
+  $('codeFilename').textContent = tipo === 'python' ? 'fisica.py' : 'physics.js';
+  $('codeLanguageNote').textContent = tipo === 'python' ? 'Python para tu entrega · equivalente al cálculo del navegador' : 'JavaScript · estas son las cuentas que ejecuta el navegador';
+  for (const id of ['pythonTab', 'jsTab']) {
+    const activo = id === (tipo === 'python' ? 'pythonTab' : 'jsTab');
+    $(id).classList.toggle('active', activo);
+    $(id).setAttribute('aria-pressed', String(activo))
+  }
+  $('copyStatus').textContent = '';
+}
+$('pythonTab').onclick = () => pintarCodigo('python');
+$('jsTab').onclick = () => pintarCodigo('js');
+$('copyCode').onclick = async () => {
+  try {
+    await navigator.clipboard.writeText(lenguaje === 'python' ? python : javascript);
+    $('copyStatus').textContent = 'Código copiado ✓'
+  } catch {
+    $('copyStatus').textContent = 'Selecciona el código y usa Ctrl+C para copiarlo.'
+  }
+};
+if (location.protocol === 'file:') {
+  $('downloadWeb').removeAttribute('href');
+  $('downloadWeb').removeAttribute('download');
+  $('downloadWeb').setAttribute('aria-disabled', 'true');
+  $('downloadWeb').textContent = '✓ Versión HTML sin conexión';
+  $('downloadPython').href = URL.createObjectURL(new Blob([pythonDescarga], {
+    type: 'text/x-python;charset=utf-8'
+  }));
+  $('downloadPython').download = 'spider_energia.py'
+}
+
+// El ritmo es solo visual. Las magnitudes físicas se calculan por posición.
+function animar(ahora) {
+  const dt = ultimaMarca ? Math.min((ahora - ultimaMarca) / 1000, .05) : 0;
+  ultimaMarca = ahora;
+  // Acercamos el dibujo a la masa elegida suavemente, incluso estando en pausa.
+  if (masaVisual !== estado.masa) {
+    masaVisual += (estado.masa - masaVisual) * (1 - Math.exp(-dt / .1));
+    if (reducido || Math.abs(estado.masa - masaVisual) < .01) masaVisual = estado.masa;
+    actualizarSilueta(masaVisual);
+  }
+  if (transicion) {
+    const u = Math.min(1, (ahora - transicion.inicio) / 550),
+      suave = u * u * (3 - 2 * u);
+    estado.posicion = transicion.desde + (transicion.hasta - transicion.desde) * suave;
+    estado.fase = Math.acos(1 - 2 * estado.posicion / 100);
+    if (u === 1) transicion = null;
+  } else if (estado.reproduciendo && estado.vista === 'laboratorio') {
+    estado.fase = (estado.fase + dt * (estado.lento ? .5 : 1) * 2 * Math.PI / 10) % (2 * Math.PI);
+    estado.posicion = (1 - Math.cos(estado.fase)) * 50;
+  }
+  if (ahora - ultimoDibujo > 30) {
+    actualizar();
+    ultimoDibujo = ahora
+  }
+  requestAnimationFrame(animar);
+}
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) pausar()
+});
+pintarCodigo('python');
+actualizarSilueta(masaVisual);
+sincronizarControles();
+sincronizarReproduccion();
+actualizar();
+mostrarVista(location.hash.slice(1) || 'laboratorio');
+requestAnimationFrame(animar);
+
+</script>
+</body>
+</html>
